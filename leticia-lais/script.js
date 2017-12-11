@@ -47,7 +47,7 @@ function setup() {
 	musica.play();// para tocar música
     
 
-	floco = cria_floco(50, 0, 1, 0); // cria flocos nas seguintes proporções
+	floco = cria_floco(50, 0, 1, 0, 1); // cria flocos nas seguintes proporções
 
 	lista_flocos.push(floco);// fiz uma lista para poder adicionar varios flocos aleatóriamente (random)
 
@@ -78,8 +78,8 @@ function draw() {
 	ultima_posicao_mouse = mouseX;
 
 	for (var i = 0; i < lista_flocos.length; i++) {
-		desenha_floco(lista_flocos[i]);
-		atualiza_posicao_floco(lista_flocos[i], vento);
+		lista_flocos[i].desenha();
+		lista_flocos[i].atualiza(vento);
 	}
 
 
@@ -95,15 +95,15 @@ function draw() {
   }
 }
 	
-function desenha_floco(floco) {
+function desenha_floco() {
 	push();
-	translate(floco.x, floco.y);
-	rotate(floco.angulo);
-	if (floco.tipo == 0) {
+	translate(this.x, this.y);
+	rotate(this.angulo);
+	if (this.tipo == 0) {
 		image(floco1, -15, -15, 30, 30);		
-	} else if (floco.tipo == 1) {
+	} else if (this.tipo == 1) {
 		image(floco2, -15, -15, 30, 30);		
-	} else if (floco.tipo == 2) {
+	} else if (this.tipo == 2) {
 		image(floco3, -15, -15, 30, 30);		
 	} else {
 		image(floco4, -15, -15, 30, 30);		
@@ -112,15 +112,15 @@ function desenha_floco(floco) {
 	pop();
 }
 //desenha os flocos de 0 a 3 aleatoriamente
-function atualiza_posicao_floco(floco, vento) {
-	floco.y += floco.velocidade;
-	floco.x += (vento / random(5, 10)) || 0;
+function atualiza_posicao_floco(vento) {
+	this.y += this.velocidade;
+	this.x += (vento / random(5, 10)) || 0;
 
-	if (floco.y > height) floco.y = -30;
-	if (floco.x > width) floco.x = 0;
-	if (floco.x < 0) floco.x = width;
+	if (this.y > height) this.y = -30;
+	if (this.x > width) this.x = 0;
+	if (this.x < 0) this.x = width;
 
-	floco.angulo += floco.velocidade_giro;
+	this.angulo += this.velocidade_giro;
 }
 	
 function cria_floco(x, y, velocidade, tipo, velocidade_giro) {
@@ -130,7 +130,9 @@ function cria_floco(x, y, velocidade, tipo, velocidade_giro) {
 		velocidade: velocidade,
 		tipo: tipo,
 		angulo: 0,
-		velocidade_giro: velocidade_giro
+		velocidade_giro: velocidade_giro,
+		desenha: desenha_floco,
+		atualiza: atualiza_posicao_floco
 	};
 }
 
